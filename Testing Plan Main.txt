@@ -1,0 +1,31 @@
+#initialization
+import RPi.GPIO as GPIO   
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+GPIO.setup(4,GPIO.out)                  #Visual Alarm GPIO ports
+GPIO.setup(5,GPIO.out)
+
+GPIO.setup(0,GPIO.out)                  #sensor designation GPIO ports
+GPIO.setup(2,GPIO.out)
+GPIO.setup(3,GPIO.out)
+
+GPIO.setup(25,GPIO.in)                  #Acknowledgement switch GPIO ports
+
+IAQ = 1
+SENSOR = 1
+
+
+
+
+
+
+def Visual_Alarm():
+if IAQ == 1:
+	Print "Environment is safe"
+elif IAQ == 2:
+	print "Environment is Unhealthy"
+	GPIO.output(4,HIGH)
+else IAQ == 3:
+	print "Environment is Dangerous"
+	GPIO.output(5,HIGH)
