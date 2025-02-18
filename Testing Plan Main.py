@@ -44,21 +44,25 @@ class VariableWatcher:
 def visual_alarm(changed_value):
     IAQ = int(changed_value)
     # Custom logic for input1
-        if IAQ == 1:
-            print("Environment is safe")
+    if IAQ == 1:
+        print("Environment is safe")
     
-        elif IAQ == 2:
-            print("Environment is Unhealthy")
-            GPIO.output(18, False)
-            GPIO.output(16, True)
+    elif IAQ == 2:
+        print("Environment is Unhealthy")
+        GPIO.output(18, False)
+        GPIO.output(16, True)
 	
-        else: 
-            print("Environment is Dangerous")
-            GPIO.output(16, False)
-            GPIO.output(18, True)
+    elif IAQ == 3: 
+        print("Environment is Dangerous")
+        GPIO.output(16, False)
+        GPIO.output(18, True)
     else:
-        GPIO.output(16,False)
-        GPIO.output(18,False)
+        GPIO.output(16, False)
+        GPIO.output(18, False)
+        GPIO.output(11,False)
+        GPIO.output(13,False)
+        GPIO.output(15,False)
+        GPIO.output(22,False)
 
 # Subroutine for when the second variable changes
 def sensor_designation(changed_value):
