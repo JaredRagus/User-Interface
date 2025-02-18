@@ -13,8 +13,8 @@ GPIO.setup(22,GPIO.OUT)
 #Acknowledgement switch GPIO ports
 GPIO.setup(37, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) 
 
-class VariableWatcher:
-    def __init__(self, value=None, identifier=None):
+class VariableWatcher:                               
+    def __init__(self, value=None, identifier=None):     #THIS SECTION OF CODE WAS ADAPTED FROM AN AI-GENERATED EXAMPLE
         self._value = value
         self.identifier = identifier  # To identify which watcher triggered the change
     
@@ -31,13 +31,11 @@ class VariableWatcher:
             self.on_change(new_value)
     
     def on_change(self, new_value):
-        # This method is triggered when the value is changed
-        
         # Call the appropriate subroutine based on the identifier
         if self.identifier == "input1":
             visual_alarm(new_value)
         elif self.identifier == "input2":
-            sensor_designation(new_value)
+            sensor_designation(new_value)	#END OF AI-GENERATED EXAMPLE
 
 
 # Subroutine for when the first variable changes
@@ -92,7 +90,7 @@ def sensor_designation(changed_value):
         GPIO.output(15,False)
         GPIO.output(22,True)
 # Main program loop
-def main():
+def main():		#THIS SECTION OF CODE WAS ADAPTED FROM AN AI-GENERATED EXAMPLE
     # Create two instances of the VariableWatcher class, one for each input
     watcher1 = VariableWatcher(identifier="input1")  # First input watcher
     watcher2 = VariableWatcher(identifier="input2")  # Second input watcher
@@ -109,7 +107,7 @@ def main():
             watcher1.value = inputs[0]
             watcher2.value = inputs[1]
         else:
-            print("Invalid input. Please enter exactly two values separated by a space.")
+            print("Invalid input. Please enter exactly two values separated by a space.")		#END OF AI-GENERATED EXAMPLE
 
 
 def button_callback(channel):
