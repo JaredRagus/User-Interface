@@ -2,13 +2,16 @@
 import RPi.GPIO as GPIO   
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-
-GPIO.setup(4,GPIO.out)                  #Visual Alarm GPIO ports
-GPIO.setup(5,GPIO.out)
+#Visual Alarm GPIO ports
+GPIO.setup(16,GPIO.OUT)                  
+GPIO.setup(18,GPIO.OUT)
 #sensor designation GPIO ports
-
+GPIO.setup(11,GPIO.OUT)
+GPIO.setup(13,GPIO.OUT)
+GPIO.setup(15,GPIO.OUT)
+GPIO.setup(22,GPIO.OUT)
 #Acknowledgement switch GPIO ports
-GPIO.setup(25, GPIO.in)
+GPIO.setup(37, GPIO.IN)
 
 class VariableWatcher:
     def __init__(self, value=None, identifier=None):
@@ -40,39 +43,50 @@ class VariableWatcher:
 # Subroutine for when the first variable changes
 def visual_alarm(changed_value):
     IAQ = int(changed_value)
-    if GPIO.input(25):
     # Custom logic for input1
         if IAQ == 1:
             print("Environment is safe")
     
         elif IAQ == 2:
             print("Environment is Unhealthy")
-            #GPIO.output(5, false)
-            #GPIO.output(4, true)
+            GPIO.output(18, False)
+            GPIO.output(16, True)
 	
         else: 
             print("Environment is Dangerous")
-            #GPIO.output(4, false)
-            #GPIO.output(5, true)
+            GPIO.output(16, False)
+            GPIO.output(18, True)
     else:
-        GPIO.output(4,false)
-        GPIO.output(5,false)
+        GPIO.output(16,False)
+        GPIO.output(18,False)
 
 # Subroutine for when the second variable changes
 def sensor_designation(changed_value):
     sensor = int(changed_value)
     if sensor == 1:
         print ("PM data has been sent from sensor 1")
-        #GPIO.output()
+        GPIO.output(11,True)
+        GPIO.output(13,False)
+        GPIO.output(15,False)
+        GPIO.output(22,False)
     elif sensor == 2:
         print ("PM data has been sent from sensor 2")
-        #GPIO.output()
+        GPIO.output(11,False)
+        GPIO.output(13,True)
+        GPIO.output(15,False)
+        GPIO.output(22,False)
     elif senssor == 3:
         print ("PM data has been sent from sensor 3")
-        #GPIO.output()
+        GPIO.output(11,False)
+        GPIO.output(13,False)
+        GPIO.output(15,True)
+        GPIO.output(22,False)
     else:
         print ("PM data has been sent from sensor 3")
-        #GPIO.output()
+        GPIO.output(11,False)
+        GPIO.output(13,False)
+        GPIO.output(15,False)
+        GPIO.output(22,True)
 # Main program loop
 def main():
     # Create two instances of the VariableWatcher class, one for each input
@@ -83,9 +97,6 @@ def main():
         # Prompt the user for both inputs at once
         user_input = input("Please enter the PM data followed by a space and the sensor it was sent from. \n 1 = healthy \n 2 = moderate \n 3 = dangerous (e.g., '1 1')")
         
-        if user_input.lower() == 'exit':
-            break
-        
         # Split the input string into two parts (values)
         inputs = user_input.split()
         
@@ -95,7 +106,20 @@ def main():
             watcher2.value = inputs[1]
         else:
             print("Invalid input. Please enter exactly two values separated by a space.")
-        
+            
+def Callback(channel):
+   state = GPIO.input(channel)
+   if state:
+      GPIO.output(16,False)
+      GPIO.output(18,False)
+   else:
+      return
+
+GPIO.add_event_detect(37, GPIO.FALLING, callback = Callback, bouncetime = 300)  
+
+while(True):
+   time.sleep(1)
+
 
 if __name__ == "__main__":
     main()
